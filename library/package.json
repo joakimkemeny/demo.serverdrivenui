@@ -1,0 +1,28 @@
+{
+  "name": "@sneakycash/ui",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    "./jsx-runtime": "./src/jsx/jsx-runtime.ts",
+    "./server": "./src/index-server.ts",
+    "./web": "./src/index-web.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/index-server.ts",
+        "./src/index-web.ts",
+        "./src/jsx/jsx-runtime.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.22.0",
+    "styled-components": "6.1.8"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.52"
+  }
+}

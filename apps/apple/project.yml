@@ -1,0 +1,203 @@
+name: SneakyCash
+
+options:
+  minimumXcodeGenVersion: 2.35.0
+  createIntermediateGroups: true
+  indentWidth: 2
+  tabWidth: 2
+  xcodeVersion: 15.0
+  deploymentTarget:
+    iOS: 17.0
+  defaultConfig: Demo (Debug)
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  useBaseInternationalization: true
+
+attributes:
+  LastUpgradeCheck: 1500
+  BuildIndependentTargetsInParallel: true
+
+configs:
+  Demo (Debug): debug
+  Demo (Release): release
+
+configFiles:
+  Demo (Debug): config/Demo.xcconfig
+  Demo (Release): config/Demo.xcconfig
+
+settings:
+  ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: true
+  CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
+  DEVELOPMENT_TEAM: $(SNEAKYCASH_DEVELOPMENT_TEAM)
+  ENABLE_USER_SCRIPT_SANDBOXING: true
+
+fileGroups:
+  - config
+  - project.yml
+
+targets:
+  SneakyCash:
+    type: application
+    platform: iOS
+    sources:
+      # Resources
+      - path: app/assets
+        buildPhase: resources
+
+      # Source files
+      - path: app/src
+        buildPhase: sources
+        createIntermediateGroups: true
+
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: $(SNEAKYCASH_APP_ICON)
+        PRODUCT_BUNDLE_IDENTIFIER: $(SNEAKYCASH_BUNDLE_ID)
+        PRODUCT_NAME: sneakycash
+      configs:
+        Demo (Release):
+          VALIDATE_PRODUCT: true
+
+    dependencies:
+      - package: UI
+      - target: SneakyCashDebtWidget
+      - target: SneakyCashSavingsWidget
+
+    info:
+      path: config/generated/SneakyCash.plist
+      properties:
+        # SneakyCash Keys
+        SneakyCash:
+          SneakyCashServerUrl: $(SNEAKYCASH_SERVER_URL)
+
+        # Core Foundation Keys
+        CFBundleDevelopmentRegion: en_US
+        CFBundleDisplayName: $(SNEAKYCASH_APP_NAME)
+        CFBundleShortVersionString: $(SNEAKYCASH_VERSION_NUMBER)
+        CFBundleVersion: $(SNEAKYCASH_BUILD_NUMBER)
+
+        # iOS Keys
+        UILaunchScreen:
+          UIColorName: white
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+
+    scheme:
+      configVariants:
+        - Demo
+
+  SneakyCashDebtWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      # Resources
+      - path: widgets/debt/assets
+        buildPhase: resources
+
+      # Source files
+      - path: widgets/debt/src
+        buildPhase: sources
+        createIntermediateGroups: true
+
+    configs:
+      Demo (Debug): debug
+      Demo (Release): release
+
+    configFiles:
+      Demo (Debug): config/DebtWidget-Demo.xcconfig
+      Demo (Release): config/DebtWidget-Demo.xcconfig
+
+    settings:
+      #INFOPLIST_FILE: widgets/debt/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: $(SNEAKYCASH_BUNDLE_ID)
+      PRODUCT_BUNDLE_IDENTIFIER: $(SNEAKYCASH_BUNDLE_ID)
+      OTHER_LDFLAGS: $(inherited) -framework WidgetKit
+
+    info:
+      path: config/generated/SneakyCashDebtWidget.plist
+      properties:
+        # SneakyCash Keys
+        SneakyCash:
+          SneakyCashServerUrl: $(SNEAKYCASH_SERVER_URL)
+
+        # Core Foundation Keys
+        CFBundleDevelopmentRegion: en_US
+        CFBundleDisplayName: $(SNEAKYCASH_APP_NAME)
+        CFBundleShortVersionString: $(SNEAKYCASH_VERSION_NUMBER)
+        CFBundleVersion: $(SNEAKYCASH_BUILD_NUMBER)
+
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+
+    dependencies:
+      - sdk: SwiftUI.framework
+      - sdk: WidgetKit.framework
+      - package: UI
+
+    scheme:
+      configVariants:
+        - Demo
+
+  SneakyCashSavingsWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      # Resources
+      - path: widgets/savings/assets
+        buildPhase: resources
+
+      # Source files
+      - path: widgets/savings/src
+        buildPhase: sources
+        createIntermediateGroups: true
+
+    configs:
+      Demo (Debug): debug
+      Demo (Release): release
+
+    configFiles:
+      Demo (Debug): config/SavingsWidget-Demo.xcconfig
+      Demo (Release): config/SavingsWidget-Demo.xcconfig
+
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: $(SNEAKYCASH_BUNDLE_ID)
+      PRODUCT_BUNDLE_IDENTIFIER: $(SNEAKYCASH_BUNDLE_ID)
+      OTHER_LDFLAGS: $(inherited) -framework WidgetKit
+
+    info:
+      path: config/generated/SneakyCashSavingsWidget.plist
+      properties:
+        # SneakyCash Keys
+        SneakyCash:
+          SneakyCashServerUrl: $(SNEAKYCASH_SERVER_URL)
+
+        # Core Foundation Keys
+        CFBundleDevelopmentRegion: en_US
+        CFBundleDisplayName: $(SNEAKYCASH_APP_NAME)
+        CFBundleShortVersionString: $(SNEAKYCASH_VERSION_NUMBER)
+        CFBundleVersion: $(SNEAKYCASH_BUILD_NUMBER)
+
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+
+    dependencies:
+      - sdk: SwiftUI.framework
+      - sdk: WidgetKit.framework
+      - package: UI
+
+    scheme:
+      configVariants:
+        - Demo
+
+packages:
+  # Libraries
+  UI:
+    path: ./ui
+    group: libraries
